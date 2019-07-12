@@ -50,6 +50,7 @@ variable "security_group_ids" {
 
 variable "tags" {
   description = "Tags to apply"
+
   default = {
     Name = "es-cleanup"
   }
