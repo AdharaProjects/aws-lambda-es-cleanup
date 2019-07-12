@@ -167,7 +167,7 @@ def lambda_handler(event, context):
         days=int(es.cfg["delete_after"]))
     for index in es.get_indices():
         print("Found index: {}".format(index["index"]))
-        if index["index"] == ".kibana":
+        if index["index"].startswith(".kibana"):
             # ignore .kibana index
             continue
 
