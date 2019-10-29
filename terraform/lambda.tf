@@ -8,8 +8,14 @@ locals {
   sg_ids = [element(concat(aws_security_group.lambda.*.id, [""]), 0)]
 }
 
+data "null_data_source" "lambda_file" {
+  inputs = {
+    filename = "${path.module}/es-cleanup.zip"
+  }
+}
+
 resource "aws_lambda_function" "es_cleanup" {
-  filename         = "${path.module}/es-cleanup.zip"
+  filename         = data.null_data_source.lambda_file.outputs.filename
   function_name    = "${var.prefix}es-cleanup${var.suffix}"
   description      = "${var.prefix}es-cleanup${var.suffix}"
   timeout          = 300
@@ -25,7 +31,6 @@ resource "aws_lambda_function" "es_cleanup" {
       skip_index   = var.skip_index
       delete_after = var.delete_after
       index_format = var.index_format
-      sns_alert    = var.sns_alert
     }
   }
 
